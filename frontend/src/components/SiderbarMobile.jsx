@@ -23,14 +23,6 @@ const SidebarMobile = () => {
         <FaBars size={24} />
       </button>
 
-      {/* Overlay ao abrir o menu */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 opacity-100 z-50"
-          onClick={() => setIsOpen(false)} // Fecha ao clicar fora do menu
-        ></div>
-      )}
-
       {/* Menu lateral */}
       <aside
         className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ${
@@ -48,7 +40,6 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/create-campaign"
-                onClick={closeSidebar} // Fecha o menu ao clicar no item
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiEdit className="text-xl" />
@@ -58,7 +49,6 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/ranking"
-                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FaTrophy className="text-xl" />
@@ -68,7 +58,6 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/reservations"
-                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FaHistory className="text-xl" />
@@ -78,7 +67,6 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/support"
-                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiMessageSquare className="text-xl" />
@@ -88,7 +76,6 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/suggestions"
-                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiFileText className="text-xl" />
@@ -98,7 +85,6 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/settings"
-                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiSettings className="text-xl" />
@@ -108,7 +94,6 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/aboutus"
-                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiUsers className="text-xl" />
@@ -118,7 +103,6 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/logout"
-                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center text-red-600 space-x-2"
               >
                 <FiLogOut className="text-xl" />
