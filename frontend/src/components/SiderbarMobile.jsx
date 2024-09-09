@@ -40,6 +40,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/create-campaign"
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiEdit className="text-xl" />
@@ -49,6 +50,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/ranking"
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FaTrophy className="text-xl" />
@@ -58,6 +60,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/reservations"
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FaHistory className="text-xl" />
@@ -67,6 +70,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/support"
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiMessageSquare className="text-xl" />
@@ -76,6 +80,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/suggestions"
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiFileText className="text-xl" />
@@ -85,6 +90,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/settings"
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiSettings className="text-xl" />
@@ -94,6 +100,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/aboutus"
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiUsers className="text-xl" />
