@@ -103,6 +103,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/logout"
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center text-red-600 space-x-2"
               >
                 <FiLogOut className="text-xl" />
