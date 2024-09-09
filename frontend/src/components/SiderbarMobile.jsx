@@ -11,6 +11,10 @@ const SidebarMobile = () => {
     setIsOpen(!isOpen);
   };
 
+  const closeSidebar = () => {
+    setIsOpen(false); // Fecha o menu
+  };
+
   return (
     <div className="relative">
       {/* Botão para abrir o menu */}
@@ -19,12 +23,12 @@ const SidebarMobile = () => {
       </button>
 
       {/* Overlay ao abrir o menu */}
-      <div
-        className={`fixed inset-0 transition-opacity duration-300 ${
-          isOpen ? 'opacity-100 z-50' : 'opacity-0 z-[-1]'
-        }`}
-        onClick={toggleSidebar}
-      ></div>
+      {isOpen && (
+        <div
+          className="fixed inset-0 opacity-100 z-50"
+          onClick={closeSidebar} // Fecha ao clicar fora do menu
+        ></div>
+      )}
 
       {/* Menu lateral */}
       <aside
@@ -34,7 +38,7 @@ const SidebarMobile = () => {
       >
         <div className="flex justify-between items-center p-4">
           <h2 className="text-2xl font-semibold text-blue-950">RIFA DIGITAL</h2>
-          <button onClick={toggleSidebar} className="text-gray-500">
+          <button onClick={closeSidebar} className="text-gray-500">
             <MdClose size={24} />
           </button>
         </div>
@@ -43,7 +47,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/create-campaign"
-                onClick={toggleSidebar}
+                onClick={closeSidebar} // Fecha o menu ao clicar no item
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiEdit className="text-xl" />
@@ -53,7 +57,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/ranking"
-                onClick={toggleSidebar}
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FaTrophy className="text-xl" />
@@ -63,7 +67,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/reservations"
-                onClick={toggleSidebar}
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FaHistory className="text-xl" />
@@ -73,7 +77,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/support"
-                onClick={toggleSidebar}
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiMessageSquare className="text-xl" />
@@ -83,7 +87,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/suggestions"
-                onClick={toggleSidebar}
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiFileText className="text-xl" />
@@ -93,7 +97,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/settings"
-                onClick={toggleSidebar}
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiSettings className="text-xl" />
@@ -103,7 +107,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/aboutus"
-                onClick={toggleSidebar}
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiUsers className="text-xl" />
@@ -113,7 +117,7 @@ const SidebarMobile = () => {
             <li>
               <Link
                 to="/logout"
-                onClick={toggleSidebar}
+                onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center text-red-600 space-x-2"
               >
                 <FiLogOut className="text-xl" />
