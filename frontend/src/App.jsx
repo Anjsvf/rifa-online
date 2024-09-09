@@ -34,7 +34,7 @@ function App() {
           </div>
 
           {/* Sidebar para telas maiores */}
-          <div className="hidden md:flex md:w-1/5 bg-gray-800  shadow-md">
+          <div className="hidden md:flex md:w-1/5 bg-white  shadow-md">
             <Sidebar />
           </div>
 
