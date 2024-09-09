@@ -11,8 +11,9 @@ const SidebarMobile = () => {
     setIsOpen(!isOpen);
   };
 
-  const closeSidebar = () => {
-    setIsOpen(false); // Fecha o menu
+  const closeSidebar = (event) => {
+    event.stopPropagation();
+    setIsOpen(false);
   };
 
   return (
@@ -26,7 +27,7 @@ const SidebarMobile = () => {
       {isOpen && (
         <div
           className="fixed inset-0 opacity-100 z-50"
-          onClick={closeSidebar} // Fecha ao clicar fora do menu
+          onClick={() => setIsOpen(false)} // Fecha ao clicar fora do menu
         ></div>
       )}
 
