@@ -24,7 +24,7 @@ const Root = () => {
             // element={isAuthenticated ? <App /> : <Navigate to="/login" />}
           />
         </Routes>
-      <App/>
+     <App/>
       </BrowserRouter>
     </StrictMode>
   );

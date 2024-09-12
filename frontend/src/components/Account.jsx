@@ -14,7 +14,7 @@ const Account = () => {
         setIsDeleting(true);
         
         // Chamada ao backend para excluir a conta
-        const response = await axios.delete('https://sua-api.com/account/delete', {
+        const response = await axios.delete('http://localhost:5000//account/delete', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`, // Supondo que o token de autenticação esteja no localStorage
           },
