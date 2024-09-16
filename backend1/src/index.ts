@@ -23,7 +23,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: 'https://rifa-online-backend1.onrender.com', 
+    origin: 'https://rifa-online-frontend.onrender.com', 
     methods: ['GET', 'POST', 'PATCH', 'DELETE'], 
     credentials: true, 
   })
