@@ -15,8 +15,14 @@ const app = (0, express_1.default)();
 (0, db_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: 'https://rifa-online-backend1.onrender.com',
+    origin: 'https://rifa-online-frontend.onrender.com',
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    credentials: true,
+}));
+app.use((0, cors_1.default)({
+    origin: 'https://rifa-online-frontend.onrender.com',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
 }));
 // Definição de Rotas

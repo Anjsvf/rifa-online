@@ -29,6 +29,12 @@ app.use(
   })
 );
 
+app.use(cors({
+  origin: 'https://rifa-online-frontend.onrender.com',
+  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}));
 
 
 
