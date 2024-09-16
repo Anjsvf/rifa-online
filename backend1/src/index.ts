@@ -23,7 +23,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: 'http://localhost:5173', 
+    origin: 'https://rifa-online-backend1.onrender.com', 
     methods: ['GET', 'POST', 'PATCH', 'DELETE'], 
     credentials: true, 
   })
