@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { FaUpload } from 'react-icons/fa'; // Importando o ícone de upload
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { FaUpload } from "react-icons/fa"; // Importando o ícone de upload
 
 const CreateCampaign = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    quota: '',
-    price: '',
-    phone: '',
-    prizeType: '', // novo campo para tipo de prêmio
-    customPrize: '', // campo para prêmio personalizado
+    name: "",
+    quota: "",
+    price: "",
+    phone: "",
+    prizeType: "", // novo campo para tipo de prêmio
+    customPrize: "", // campo para prêmio personalizado
     image: null,
   });
   const [imagePreview, setImagePreview] = useState(null);
@@ -18,7 +18,7 @@ const CreateCampaign = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === 'image') {
+    if (name === "image") {
       const file = files[0];
       setFormData({
         ...formData,
@@ -44,31 +44,33 @@ const CreateCampaign = () => {
     }
 
     try {
-      const response = await axios.post('https://sua-api.com/campaigns', data, {
+      const response = await axios.post("http://localhost:5000/api/campaign", data, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
 
       const campaignId = response.data.id; // ID da campanha recém-criada
-      navigate('/dashboard');
+      navigate("/dashboard");
 
       // Aguarda 2 minutos (120000 milissegundos) e depois gera as cartelas
       setTimeout(() => {
         generateCards(campaignId);
       }, 120000); // 2 minutos
     } catch (error) {
-      console.error('Erro ao criar a campanha:', error);
+      console.error("Erro ao criar a campanha:", error);
     }
   };
 
   // Função para gerar cartelas
   const generateCards = async (campaignId) => {
     try {
-      await axios.post(`https://sua-api.com/campaigns/${campaignId}/generate-cards`);
-      console.log('Cartelas geradas com sucesso!');
+      await axios.post(
+        `https://sua-api.com/campaigns/${campaignId}/generate-cards`
+      );
+      console.log("Cartelas geradas com sucesso!");
     } catch (error) {
-      console.error('Erro ao gerar as cartelas:', error);
+      console.error("Erro ao gerar as cartelas:", error);
     }
   };
 
@@ -124,7 +126,7 @@ const CreateCampaign = () => {
             required
           />
         </div>
-        
+
         {/* Select para o tipo de prêmio */}
         <div>
           <label className="block text-gray-700">Tipo de Prêmio</label>
@@ -148,7 +150,7 @@ const CreateCampaign = () => {
         </div>
 
         {/* Input para prêmio personalizado */}
-        {formData.prizeType === 'Outro' && (
+        {formData.prizeType === "Outro" && (
           <div>
             <label className="block text-gray-700">Especifique o Prêmio</label>
             <input

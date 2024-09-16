@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { FaRegFileAlt, FaDice, FaCheckCircle } from 'react-icons/fa'; // Importando ícones
+import React, { useState } from "react";
+import axios from "axios";
+import { FaRegFileAlt, FaDice, FaCheckCircle } from "react-icons/fa"; // Importando ícones
 
 const GenerateCard = () => {
   const [cards, setCards] = useState([]);
@@ -10,7 +10,8 @@ const GenerateCard = () => {
     const newCards = [];
     for (let i = 0; i < numCards; i++) {
       const numbers = [];
-      while (numbers.length < 10) { // Gerando 10 números por cartela
+      while (numbers.length < 10) {
+        // Gerando 10 números por cartela
         const randomNumber = Math.floor(Math.random() * 100) + 1;
         if (!numbers.includes(randomNumber)) {
           numbers.push(randomNumber);
@@ -21,19 +22,20 @@ const GenerateCard = () => {
     setCards(newCards);
 
     // Enviar as cartelas geradas para o backend
-    axios.post('/api/cards', { cards: newCards })
-      .then(response => {
-        console.log('Cards saved:', response.data);
+    axios
+      .post("http://locahost:5000/api/carts", { cards: newCards })
+      .then((response) => {
+        console.log("Cards saved:", response.data);
       })
-      .catch(error => {
-        console.error('Error saving cards:', error);
+      .catch((error) => {
+        console.error("Error saving cards:", error);
       });
   };
 
   return (
     <div className="container mx-auto p-8 bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-bold mb-6 text-center flex items-center justify-center gap-2">
-        <FaRegFileAlt /> Gerar Cartelas 
+        <FaRegFileAlt /> Gerar Cartelas
       </h2>
       <div className="mb-4">
         <label className="block text-gray-700">Número de Cartelas</label>
@@ -50,7 +52,7 @@ const GenerateCard = () => {
         onClick={handleGenerateCards}
         className="bg-blue-600 text-white px-4 py-2 rounded w-full flex items-center justify-center gap-2"
       >
-        <FaDice /> Gerar cartelas 
+        <FaDice /> Gerar cartelas
       </button>
 
       <div className="mt-6">

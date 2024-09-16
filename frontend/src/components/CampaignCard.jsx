@@ -3,11 +3,11 @@ import Button from './Button';
 
 const CampaignCard = ({ campaign }) => {
   const handlePublish = () => {
-    // Implementar função de publicar campanha
+    
   };
 
   const handleViewDemo = () => {
-    // Implementar função de visualizar a demonstração
+ 
   };
 
   return (

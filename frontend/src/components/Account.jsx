@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Account = () => {
-  const [isDeleting, setIsDeleting] = useState(false); // Estado para controlar o processo de exclusão
+  const [isDeleting, setIsDeleting] = useState(false); 
   const navigate = useNavigate();
 
   const handleDeleteAccount = async () => {
@@ -12,18 +12,17 @@ const Account = () => {
     if (confirmed) {
       try {
         setIsDeleting(true);
-        
-        // Chamada ao backend para excluir a conta
-        const response = await axios.delete('http://localhost:5000//account/delete', {
+     
+        const response = await axios.delete('http://localhost:5000/account/delete', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, // Supondo que o token de autenticação esteja no localStorage
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
 
         if (response.status === 200) {
           alert('Conta excluída com sucesso.');
-          localStorage.removeItem('token'); // Remove o token da sessão
-          navigate('/'); // Redireciona para a página inicial ou de login após a exclusão
+          localStorage.removeItem('token'); 
+          navigate('/');
         }
       } catch (error) {
         console.error('Erro ao excluir a conta:', error);

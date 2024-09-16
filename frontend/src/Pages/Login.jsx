@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { FaEnvelope, FaLock, FaSignInAlt } from "react-icons/fa"; // Importando ícones
+import { FaEnvelope, FaLock, FaArrowLeft } from "react-icons/fa";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = ({ onAuth }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [error, setError] = useState('');
+
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -17,78 +17,97 @@ const Login = ({ onAuth }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await axios.post("http://localhost:5000/api/login", formData); // Ajuste a URL conforme o backend
-      localStorage.setItem("authToken", response.data.token);
-      onAuth();
-      navigate('/'); // Redireciona para a página principal após login bem-sucedido
+      const response = await fetch("http://localhost:5000/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("authToken", data.token); // Salva o token de autenticação
+        localStorage.setItem("userName", data.firstName || ""); // Verifica se o nome do usuário existe, caso contrário usa "Usuário"
+        
+        onAuth(); // Chama a função de autenticação
+        navigate("/"); // Redireciona para a página principal
+      } else {
+        setError("Credenciais inválidas. Tente novamente.");
+      }
     } catch (err) {
-      setError('Falha no login. Verifique suas credenciais.');
+      setError("Erro ao conectar com o servidor.");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-6 sm:px-6 lg:px-8">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">RIFA DIGITAL</h1>
+          <h1 className="text-2xl font-semibold text-gray-800">RIFA DIGITAL</h1>
+          <h2 className="text-lg font-medium text-gray-600">Faça login!</h2>
+          <p className="text-sm text-gray-500">
+            Preencha os campos abaixo para entrar em sua conta.
+          </p>
         </div>
-        {error && <p className="text-red-500">{error}</p>} {/* Exibe erros */}
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
-            <div className="flex items-center mt-1">
-              <FaEnvelope className="mr-2 text-gray-500" />
+            <label className="block text-sm font-medium text-gray-700" htmlFor="email">
+              Email
+            </label>
+            <div className="relative">
+              <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
+                id="email"
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                className="pl-10 mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Senha</label>
-            <div className="flex items-center mt-1">
-              <FaLock className="mr-2 text-gray-500" />
+            <label className="block text-sm font-medium text-gray-700" htmlFor="password">
+              Senha
+            </label>
+            <div className="relative">
+              <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
+                id="password"
                 type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                className="pl-10 mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                 required
               />
             </div>
           </div>
 
-          <div className="flex justify-end">
-            <a href="#" className="text-sm text-blue-600 hover:text-blue-800">
-              Esqueceu a senha?
-            </a>
-          </div>
-
-          <div>
+          <div className="flex items-center justify-between">
+            <Link
+              to="/register"
+              className="text-sm text-gray-600 hover:text-gray-800 flex items-center"
+            >
+              <FaArrowLeft className="mr-1" /> Registre-se
+            </Link>
             <button
               type="submit"
-              className="w-full py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 flex items-center justify-center"
+              className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             >
-              <FaSignInAlt className="mr-2" /> Fazer login
+              Entrar
             </button>
           </div>
         </form>
-
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
-            Não possui conta?{" "}
-            <Link to="/register" className="text-blue-600 hover:text-blue-800">
-              Registre-se já!
-            </Link>
-          </p>
-        </div>
       </div>
     </div>
   );

@@ -1,25 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { FiFilter } from 'react-icons/fi'; // Ícone de filtro
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { FiFilter } from "react-icons/fi"; // Ícone de filtro
 
 const Reservations = () => {
   const [campaigns, setCampaigns] = useState([]); // Dados das campanhas
-  const [selectedCampaign, setSelectedCampaign] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [searchFilter, setSearchFilter] = useState('');
-  const [dateFilter, setDateFilter] = useState('');
+  const [selectedCampaign, setSelectedCampaign] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [searchFilter, setSearchFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
   const [reservations, setReservations] = useState([]); // Histórico das rifas
-  
+
   // Exemplo de chamada para buscar as campanhas e reservas (pode ajustar conforme o backend)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const campaignResponse = await axios.get('http://localhost:5000/api/campaigns'); // URL do backend
+        const campaignResponse = await axios.get(
+          "http://localhost:5000/api/campaigns"
+        ); // URL do backend
         setCampaigns(campaignResponse.data);
-        const reservationResponse = await axios.get('http://localhost:5000/api/reservations'); // URL do backend
+        const reservationResponse = await axios.get(
+          "http://localhost:5000/reservations"
+        ); // URL do backend
         setReservations(reservationResponse.data);
       } catch (error) {
-        console.error('Erro ao buscar os dados', error);
+        console.error("Erro ao buscar os dados", error);
       }
     };
     fetchData();
@@ -50,7 +54,9 @@ const Reservations = () => {
       <h2 className="text-2xl font-bold mb-6">Histórico</h2>
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Selecione uma campanha</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Selecione uma campanha
+          </label>
           <select
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             value={selectedCampaign}
@@ -66,7 +72,9 @@ const Reservations = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Status das reservas</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Status das reservas
+          </label>
           <select
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             value={statusFilter}
@@ -80,7 +88,9 @@ const Reservations = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Filtro da Pesquisa</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Filtro da Pesquisa
+          </label>
           <input
             type="text"
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -91,14 +101,16 @@ const Reservations = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Filtro da data</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Filtro da data
+          </label>
           <div className="mt-1 flex items-center space-x-4">
             <label>
               <input
                 type="radio"
                 name="dateFilter"
                 value=""
-                checked={dateFilter === ''}
+                checked={dateFilter === ""}
                 onChange={handleDateChange}
               />
               <span className="ml-2">Nenhum filtro</span>
@@ -108,7 +120,7 @@ const Reservations = () => {
                 type="radio"
                 name="dateFilter"
                 value="today"
-                checked={dateFilter === 'today'}
+                checked={dateFilter === "today"}
                 onChange={handleDateChange}
               />
               <span className="ml-2">Hoje</span>
@@ -135,10 +147,18 @@ const Reservations = () => {
             {reservations.map((reservation) => (
               <li key={reservation.id} className="mb-4">
                 <div className="bg-white p-4 rounded-lg shadow-md">
-                  <p><strong>Campanha:</strong> {reservation.campaignName}</p>
-                  <p><strong>Status:</strong> {reservation.status}</p>
-                  <p><strong>Data:</strong> {reservation.date}</p>
-                  <p><strong>Detalhes:</strong> {reservation.details}</p>
+                  <p>
+                    <strong>Campanha:</strong> {reservation.campaignName}
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {reservation.status}
+                  </p>
+                  <p>
+                    <strong>Data:</strong> {reservation.date}
+                  </p>
+                  <p>
+                    <strong>Detalhes:</strong> {reservation.details}
+                  </p>
                 </div>
               </li>
             ))}
