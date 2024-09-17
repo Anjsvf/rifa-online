@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaEnvelope, FaLock, FaArrowLeft } from "react-icons/fa";
+import { FaEnvelope, FaLock, FaArrowLeft, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
 
 const Login = ({ onAuth }) => {
@@ -9,6 +9,7 @@ const Login = ({ onAuth }) => {
   });
 
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -32,17 +33,21 @@ const Login = ({ onAuth }) => {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("authToken", data.token); // Salva o token de autenticação
-        localStorage.setItem("userName", data.firstName || ""); // Verifica se o nome do usuário existe, caso contrário usa "Usuário"
+        localStorage.setItem("authToken", data.token); 
+        localStorage.setItem("userName", data.firstName || ""); 
         
-        onAuth(); // Chama a função de autenticação
-        navigate("/"); // Redireciona para a página principal
+        onAuth(); 
+        navigate("/"); 
       } else {
         setError("Credenciais inválidas. Tente novamente.");
       }
     } catch (err) {
       setError("Erro ao conectar com o servidor.");
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -83,13 +88,20 @@ const Login = ({ onAuth }) => {
               <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"} 
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 className="pl-10 mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                 required
               />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
             </div>
           </div>
 

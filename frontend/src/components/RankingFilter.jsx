@@ -6,15 +6,15 @@ const RankingFilter = () => {
   const [startDate, setStartDate] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleFilter = () => {
-    axios.post('/api/ranking/filter', { startDate, searchQuery })
-      .then(response => {
-        console.log('Filtered data:', response.data);
-      })
-      .catch(error => {
-        console.error('Error filtering data:', error);
-      });
-  };
+  // const handleFilter = () => {
+  //   axios.post('/api/ranking/filter', { startDate, searchQuery })
+  //     .then(response => {
+  //       console.log('Filtered data:', response.data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error filtering data:', error);
+  //     });
+  // };
 
   return (
     <div className="ranking-filter bg-white p-6 rounded-lg shadow-lg space-y-4 max-w-lg mx-auto sm:space-y-6">
@@ -53,7 +53,7 @@ const RankingFilter = () => {
 
       <button
         // onClick={handleFilter}
-        className="bg-sky-950 text-white px-4 py-2 rounded-md w-full flex items-center justify-center space-x-2"
+        className="bg-green-600 text-white px-4 py-2 rounded-md w-full flex items-center justify-center space-x-2"
       >
         <FaFilter />
         <span>Aplicar Filtros</span>

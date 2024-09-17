@@ -5,16 +5,16 @@ import { FaTrophy, FaMedal } from "react-icons/fa";
 const RankingTable = () => {
   const [rankingData, setRankingData] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("/api/ranking")
-      .then((response) => {
-        setRankingData(response.data);
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar dados do ranking:", error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("/api/ranking")
+  //     .then((response) => {
+  //       setRankingData(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Erro ao buscar dados do ranking:", error);
+  //     });
+  // }, []);
 
   return (
     <div className="ranking-table p-4 md:p-8 bg-gray-100 min-h-screen">

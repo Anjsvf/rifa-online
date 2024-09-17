@@ -196,7 +196,7 @@ const CreateCampaign = () => {
         </div>
         <button
           type="submit"
-          className="bg-sky-950 text-white px-4 py-2 rounded w-full"
+          className="bg-green-600 text-white px-4 py-2 rounded w-full"
         >
           Criar Campanha
         </button>

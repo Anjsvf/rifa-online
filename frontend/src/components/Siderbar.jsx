@@ -8,7 +8,7 @@ import {
   FiMessageSquare,
   FiFileText,
 } from "react-icons/fi"; // Ícones do menu
-import { FaHistory, FaTrophy } from "react-icons/fa";
+import { FaHeadset, FaHistory, FaTrophy } from "react-icons/fa";
 
 const Sidebar = () => {
   return (
@@ -48,7 +48,7 @@ const Sidebar = () => {
               to="/support"
               className="text-lg font-medium  hover:bg-gray-100  p-2 rounded flex items-center space-x-2"
             >
-              <FiMessageSquare className="text-xl" />
+              <FaHeadset className="text-xl" />
               <span>Suporte</span>
             </Link>
           </li>

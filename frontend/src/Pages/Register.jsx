@@ -5,6 +5,8 @@ import {
   FaEnvelope,
   FaLock,
   FaPhone,
+  FaEye,
+  FaEyeSlash,
 } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -17,8 +19,13 @@ const Register = ({ onAuth }) => {
     phone: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,25 +40,28 @@ const Register = ({ onAuth }) => {
     }
 
     try {
-      const response = await fetch("https://rifa-online-backend1.onrender.com/api/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          email: formData.email,
-          password: formData.password,
-          phone: formData.phone,
-        }),
-      });
+      const response = await fetch(
+        "https://rifa-online-backend1.onrender.com/api/users/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstName: formData.firstName,
+            email: formData.email,
+            password: formData.password,
+            phone: formData.phone,
+          }),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("authToken", data.token); // Salva o token de autenticação
-        localStorage.setItem("userName", formData.firstName); // Salva o nome do usuário no localStorage
+        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("userName", formData.firstName);
         onAuth();
-        navigate("/"); // Redireciona para a página principal
+        navigate("/");
       } else {
         setError("Erro ao registrar. Por favor, tente novamente.");
       }
@@ -130,13 +140,19 @@ const Register = ({ onAuth }) => {
             <div className="relative flex items-center">
               <FaLock className="absolute left-3 text-gray-400" />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 className="pl-10 mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                 required
               />
+              <div
+                className="absolute right-3 text-gray-400 cursor-pointer"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </div>
             </div>
           </div>
 

@@ -72,7 +72,7 @@ const Support = () => {
         </div>
         <button
           type="submit"
-          className="bg-sky-950 text-white flex items-center justify-center px-4 py-2 rounded w-full hover:bg-blue-700 transition-colors"
+          className="bg-green-600 text-white flex items-center justify-center px-4 py-2 rounded w-full hover:bg-green-700 transition-colors"
         >
           <FaPaperPlane className="mr-2" />
           Enviar Mensagem

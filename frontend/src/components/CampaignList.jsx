@@ -8,18 +8,18 @@ const CampaignList = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/campaign")
-      .then((response) => {
-        setCampaigns(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching campaigns:", error);
-        setLoading(false);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:5000/api/campaign")
+  //     .then((response) => {
+  //       setCampaigns(response.data);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching campaigns:", error);
+  //       setLoading(false);
+  //     });
+  // }, []);
 
   if (loading) {
     return <LoadingSpinner />;

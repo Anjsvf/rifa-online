@@ -129,7 +129,7 @@ const Reservations = () => {
         </div>
 
         <button
-          className="flex items-center bg-sky-950 text-white px-4 py-2 rounded-md"
+          className="flex items-center bg-green-600 text-white px-4 py-2 rounded-md"
           onClick={applyFilters}
         >
           <FiFilter className="mr-2" /> {/* Ícone de filtro */}

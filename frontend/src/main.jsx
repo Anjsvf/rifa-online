@@ -21,10 +21,10 @@ const Root = () => {
           <Route path="/register" element={<Register onAuth={handleAuth} />} />
           <Route
             path="/*"
-            element={isAuthenticated ? <App /> : <Navigate to="/login" />}
+            // element={isAuthenticated ? <App /> : <Navigate to="/login" />}
           />
         </Routes>
-     {/* <App/> */}
+     <App/>
       </BrowserRouter>
     </StrictMode>
   );

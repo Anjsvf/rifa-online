@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaBars, FaHistory, FaTrophy } from 'react-icons/fa'; // Ícones do menu
+import { FaBars, FaHeadset, FaHistory, FaTrophy } from 'react-icons/fa'; // Ícones do menu
 import { MdClose } from 'react-icons/md'; // Ícone de fechar
 import { FiSettings, FiFileText, FiMessageSquare, FiLogOut, FiUsers, FiEdit } from 'react-icons/fi'; // Outros ícones
 
@@ -73,7 +73,7 @@ const SidebarMobile = () => {
                 onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
-                <FiMessageSquare className="text-xl" />
+                <FaHeadset className="text-xl" />
                 <span>Suporte</span>
               </Link>
             </li>

@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="bg-sky-950 text-white py-4 mt-8">
+    <footer className="bg-green-600 text-white py-4 mt-8">
       <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
         <p className="text-sm">© 2024 Rifa Digital. Todos os direitos reservados.</p>
         
