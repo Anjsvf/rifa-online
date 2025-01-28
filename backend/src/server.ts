@@ -14,11 +14,12 @@ connectDB();
 
 app.use(
   cors({
-    origin: "https://rifa-online-frontend.onrender.com/",
+    origin: "https://rifa-online-frontend.onrender.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 app.use(express.json());
 
 
