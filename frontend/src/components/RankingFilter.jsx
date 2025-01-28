@@ -1,23 +1,16 @@
 import React, { useState } from 'react';
 import { FaCalendarAlt, FaSearch, FaFilter } from 'react-icons/fa';
-import axios from 'axios';
 
-const RankingFilter = () => {
+const RankingFilter = ({ onFilter }) => {
   const [startDate, setStartDate] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // const handleFilter = () => {
-  //   axios.post('/api/ranking/filter', { startDate, searchQuery })
-  //     .then(response => {
-  //       console.log('Filtered data:', response.data);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error filtering data:', error);
-  //     });
-  // };
+  const handleFilter = () => {
+    onFilter({ startDate, searchQuery });
+  };
 
   return (
-    <div className="ranking-filter bg-white p-6 rounded-lg shadow-lg space-y-4 max-w-lg mx-auto sm:space-y-6">
+    <div className="ranking-filter bg-white p-6 rounded-lg shadow-lg space-y-4 max-w-lg mx-auto sm:space-y-6 mb-6">
       <div className="date-filter">
         <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">
           Data de Início:
@@ -52,7 +45,7 @@ const RankingFilter = () => {
       </div>
 
       <button
-        // onClick={handleFilter}
+        onClick={handleFilter}
         className="bg-green-600 text-white px-4 py-2 rounded-md w-full flex items-center justify-center space-x-2"
       >
         <FaFilter />

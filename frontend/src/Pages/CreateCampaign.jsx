@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FaUpload } from "react-icons/fa"; // Importando o ícone de upload
+import { FaUpload } from "react-icons/fa";
+import GenerateCard from "../components/GenerateCart"; 
+const API_URL = import.meta.env.VITE_API_URL;
 
 const CreateCampaign = () => {
   const [formData, setFormData] = useState({
@@ -9,15 +11,36 @@ const CreateCampaign = () => {
     quota: "",
     price: "",
     phone: "",
-    prizeType: "", // novo campo para tipo de prêmio
-    customPrize: "", // campo para prêmio personalizado
+    prizeType: "",
+    customPrize: "",
     image: null,
   });
   const [imagePreview, setImagePreview] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [generatedCards, setGeneratedCards] = useState([]); 
   const navigate = useNavigate();
 
+ 
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(value);
+  };
+
+ 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
+
     if (name === "image") {
       const file = files[0];
       setFormData({
@@ -25,7 +48,25 @@ const CreateCampaign = () => {
         image: file,
       });
       if (file) {
-        setImagePreview(URL.createObjectURL(file)); // Mostrando a pré-visualização da imagem
+        setImagePreview(URL.createObjectURL(file));
+      }
+    } else if (name === "price") {
+      const numericValue = value.replace(/\D/g, ""); 
+      const formattedValue = formatCurrency(numericValue / 100); 
+      setFormData({
+        ...formData,
+        [name]: formattedValue,
+      });
+    } else if (name === "phone") {
+      
+      let phoneNumber = value.replace(/\D/g, "");
+      if (phoneNumber.length <= 11) {
+        phoneNumber = phoneNumber.replace(/^(\d{2})(\d)/g, "($1) $2");
+        phoneNumber = phoneNumber.replace(/(\d)(\d{4})$/, "$1-$2");
+        setFormData({
+          ...formData,
+          [name]: phoneNumber,
+        });
       }
     } else {
       setFormData({
@@ -35,106 +76,153 @@ const CreateCampaign = () => {
     }
   };
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+    setIsLoading(true);
 
+    
+    if (
+      !formData.name ||
+      !formData.quota ||
+      !formData.price ||
+      !formData.phone ||
+      !formData.prizeType
+    ) {
+      setError("Por favor, preencha todos os campos obrigatórios.");
+      setIsLoading(false);
+      return;
+    }
+
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+      setError("Sessão expirada. Por favor, faça login novamente.");
+      navigate("/login");
+      return;
+    }
+
+  
     const data = new FormData();
     for (const key in formData) {
       data.append(key, formData[key]);
     }
 
+    
+    data.append("cards", JSON.stringify(generatedCards));
+
     try {
-      const response = await axios.post("http://localhost:5000/api/campaign", data, {
+   
+      const response = await axios.post(`${API_URL}/api/campaigns`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${authToken}`,
         },
       });
 
-      const campaignId = response.data.id; // ID da campanha recém-criada
-      navigate("/dashboard");
+      const campaignId = response.data.id;
 
-      // Aguarda 2 minutos (120000 milissegundos) e depois gera as cartelas
-      setTimeout(() => {
-        generateCards(campaignId);
-      }, 120000); // 2 minutos
+    
+      navigate("/dashboard", {
+        state: {
+          message: "Campanha criada com sucesso!",
+        },
+      });
     } catch (error) {
       console.error("Erro ao criar a campanha:", error);
-    }
-  };
-
-  // Função para gerar cartelas
-  const generateCards = async (campaignId) => {
-    try {
-      await axios.post(
-        `https://sua-api.com/campaigns/${campaignId}/generate-cards`
-      );
-      console.log("Cartelas geradas com sucesso!");
-    } catch (error) {
-      console.error("Erro ao gerar as cartelas:", error);
+      if (error.response?.status === 401) {
+        localStorage.removeItem("authToken");
+        setError("Sessão expirada. Por favor, faça login novamente.");
+        navigate("/login");
+      } else {
+        setError(
+          error.response?.data?.message ||
+            "Erro ao criar a campanha. Por favor, tente novamente."
+        );
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="container mx-auto p-8 bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-bold mb-6 text-center">Criar Campanha</h2>
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+          {error}
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="space-y-4">
+        
         <div>
-          <label className="block text-gray-700">Nome da campanha</label>
+          <label className="block text-gray-700">Nome da Campanha</label>
           <input
             type="text"
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-            placeholder="Nome da campanha"
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-600"
+            placeholder="Nome da Campanha"
+            disabled={isLoading}
             required
           />
         </div>
+
+     
         <div>
-          <label className="block text-gray-700">Quantidade de cotas</label>
+          <label className="block text-gray-700">Quantidade de Cotas</label>
           <input
             type="number"
             name="quota"
             value={formData.quota}
             onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-            placeholder="Quantidade de cotas"
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-600"
+            placeholder="Quantidade de Cotas"
+            disabled={isLoading}
             required
           />
         </div>
+
+        
         <div>
-          <label className="block text-gray-700">Valor da cota (R$)</label>
+          <label className="block text-gray-700">Valor da Cota (R$)</label>
           <input
             type="text"
             name="price"
             value={formData.price}
             onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-600"
             placeholder="R$ 0,00"
+            disabled={isLoading}
             required
           />
         </div>
+
+       
         <div>
-          <label className="block text-gray-700">Número de celular</label>
+          <label className="block text-gray-700">Número de Celular</label>
           <input
             type="tel"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-600"
             placeholder="(99) 99999-9999"
+            disabled={isLoading}
             required
           />
         </div>
 
-        {/* Select para o tipo de prêmio */}
+        
         <div>
           <label className="block text-gray-700">Tipo de Prêmio</label>
           <select
             name="prizeType"
             value={formData.prizeType}
             onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-600"
+            disabled={isLoading}
             required
           >
             <option value="">Selecione o prêmio</option>
@@ -149,7 +237,7 @@ const CreateCampaign = () => {
           </select>
         </div>
 
-        {/* Input para prêmio personalizado */}
+   
         {formData.prizeType === "Outro" && (
           <div>
             <label className="block text-gray-700">Especifique o Prêmio</label>
@@ -158,19 +246,23 @@ const CreateCampaign = () => {
               name="customPrize"
               value={formData.customPrize}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-600"
               placeholder="Descreva o prêmio"
+              disabled={isLoading}
               required
             />
           </div>
         )}
 
+     
         <div>
-          <label className="block text-gray-700 mb-2">Imagem do prêmio</label>
+          <label className="block text-gray-700 mb-2">Imagem do Prêmio</label>
           <div className="flex items-center justify-center w-full">
             <label
               htmlFor="file-upload"
-              className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-green-600"
+              className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-green-600 ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
               {imagePreview ? (
                 <img
@@ -190,15 +282,27 @@ const CreateCampaign = () => {
                 name="image"
                 onChange={handleChange}
                 className="hidden"
+                accept="image/jpeg,image/png"
+                disabled={isLoading}
               />
             </label>
           </div>
         </div>
+
+       
+        <GenerateCard onGenerate={(cards) => setGeneratedCards(cards)} />
+
+ 
         <button
           type="submit"
-          className="bg-green-600 text-white px-4 py-2 rounded w-full"
+          className={`w-full px-4 py-2 rounded text-white font-semibold ${
+            isLoading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700"
+          }`}
+          disabled={isLoading}
         >
-          Criar Campanha
+          {isLoading ? "Criando..." : "Criar Campanha"}
         </button>
       </form>
     </div>

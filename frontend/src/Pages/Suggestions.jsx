@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiMessageSquare } from 'react-icons/fi'; // Ícone de sugestão
+import { FiMessageSquare } from 'react-icons/fi'; 
 
 const Suggestions = () => {
   const [suggestion, setSuggestion] = useState('');
@@ -10,10 +10,10 @@ const Suggestions = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Lógica para enviar a sugestão ao backend
+   
     console.log('Sugestão enviada:', suggestion);
 
-    // Limpar o campo após envio
+  
     setSuggestion('');
   };
 
@@ -23,7 +23,7 @@ const Suggestions = () => {
       
       <form onSubmit={handleSubmit} className="space-y-4 max-w-lg mx-auto">
         <div className="flex items-center justify-center mb-4">
-          <FiMessageSquare className="text-6xl text-sky-950" />
+          <FiMessageSquare className="text-6xl text-green-600" />
         </div>
         <div>
           <textarea
@@ -37,7 +37,7 @@ const Suggestions = () => {
         </div>
         <button
           type="submit"
-          className="bg-sky-950 text-white px-4 py-2 rounded w-full"
+          className="bg-green-600 text-white px-4 py-2 rounded w-full"
         >
           Enviar Sugestão
         </button>

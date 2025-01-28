@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaEnvelope, FaLock, FaArrowLeft, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Login = ({ onAuth }) => {
   const [formData, setFormData] = useState({
@@ -9,7 +10,8 @@ const Login = ({ onAuth }) => {
   });
 
   const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -18,9 +20,17 @@ const Login = ({ onAuth }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setError("Por favor, insira um email válido.");
+      setLoading(false);
+      return;
+    }
 
     try {
-      const response = await fetch("https://rifa-online-backend1.onrender.com/api/users/login", {
+      const response = await fetch(`${API_URL}/api/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,16 +43,17 @@ const Login = ({ onAuth }) => {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("authToken", data.token); 
-        localStorage.setItem("userName", data.firstName || ""); 
-        
-        onAuth(); 
-        navigate("/"); 
+        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("userName", data.firstName || "");
+        onAuth();
+        navigate("/");
       } else {
         setError("Credenciais inválidas. Tente novamente.");
       }
     } catch (err) {
       setError("Erro ao conectar com o servidor.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,16 +67,12 @@ const Login = ({ onAuth }) => {
         <div className="text-center mb-6">
           <h1 className="text-2xl font-semibold text-gray-800">RIFA DIGITAL</h1>
           <h2 className="text-lg font-medium text-gray-600">Faça login!</h2>
-          <p className="text-sm text-gray-500">
-            Preencha os campos abaixo para entrar em sua conta.
-          </p>
+          <p className="text-sm text-gray-500">Preencha os campos abaixo para entrar em sua conta.</p>
         </div>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700" htmlFor="email">
-              Email
-            </label>
+            <label className="block text-sm font-medium text-gray-700" htmlFor="email">Email</label>
             <div className="relative">
               <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
@@ -81,14 +88,12 @@ const Login = ({ onAuth }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700" htmlFor="password">
-              Senha
-            </label>
+            <label className="block text-sm font-medium text-gray-700" htmlFor="password">Senha</label>
             <div className="relative">
               <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 id="password"
-                type={showPassword ? "text" : "password"} 
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
@@ -98,25 +103,23 @@ const Login = ({ onAuth }) => {
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
               </button>
             </div>
           </div>
 
           <div className="flex items-center justify-between">
-            <Link
-              to="/register"
-              className="text-sm text-gray-600 hover:text-gray-800 flex items-center"
-            >
+            <Link to="/register" className="text-sm text-gray-600 hover:text-gray-800 flex items-center">
               <FaArrowLeft className="mr-1" /> Registre-se
             </Link>
             <button
               type="submit"
-              className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50"
+              disabled={loading}
             >
-              Entrar
+              {loading ? "Carregando..." : "Entrar"}
             </button>
           </div>
         </form>

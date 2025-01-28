@@ -1,26 +1,58 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaTrophy, FaMedal } from "react-icons/fa";
+import RankingFilter from './RankingFilter';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const RankingTable = () => {
   const [rankingData, setRankingData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // useEffect(() => {
-  //   axios
-  //     .get("/api/ranking")
-  //     .then((response) => {
-  //       setRankingData(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Erro ao buscar dados do ranking:", error);
-  //     });
-  // }, []);
+  const fetchRanking = async (filters = {}) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/ranking`, {
+        params: filters,
+      });
+      setRankingData(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Erro ao buscar dados do ranking:", error);
+      setError(error.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRanking();
+  }, []);
+
+  const handleFilter = (filters) => {
+    fetchRanking(filters);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-8 text-red-600">
+        <p>Erro ao carregar o ranking: {error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="ranking-table p-4 md:p-8 bg-gray-100 min-h-screen">
       <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-center">
         Ranking
       </h2>
+      <RankingFilter onFilter={handleFilter} />
       <div className="bg-white shadow-md rounded-lg overflow-x-auto">
         <table className="min-w-full table-auto text-left">
           <thead>

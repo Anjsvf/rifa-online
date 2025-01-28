@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaBars, FaHeadset, FaHistory, FaTrophy } from 'react-icons/fa'; // Ícones do menu
-import { MdClose } from 'react-icons/md'; // Ícone de fechar
-import { FiSettings, FiFileText, FiMessageSquare, FiLogOut, FiUsers, FiEdit } from 'react-icons/fi'; // Outros ícones
+import { FaBars, FaHeadset, FaHistory, FaTrophy } from 'react-icons/fa'; 
+import { MdClose } from 'react-icons/md'; 
+import { FiSettings, FiFileText, FiMessageSquare, FiLogOut, FiUsers, FiEdit } from 'react-icons/fi'; 
 
 const SidebarMobile = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,14 +18,14 @@ const SidebarMobile = () => {
 
   return (
     <div className="relative">
-      {/* Botão para abrir o menu */}
+    
       <button onClick={toggleSidebar} className="text-gray-500 p-2">
         <FaBars size={24} />
       </button>
 
       {/* Menu lateral */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ${
+        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 z-50 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -69,22 +69,22 @@ const SidebarMobile = () => {
             </li>
             <li>
               <Link
-                to="/support"
-                onClick={closeSidebar}
-                className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
-              >
-                <FaHeadset className="text-xl" />
-                <span>Suporte</span>
-              </Link>
-            </li>
-            <li>
-              <Link
                 to="/suggestions"
                 onClick={closeSidebar}
                 className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
               >
                 <FiFileText className="text-xl" />
                 <span>Sugestões</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/support"
+                onClick={closeSidebar}
+                className="text-lg font-medium hover:bg-gray-100 p-2 rounded flex items-center space-x-2"
+              >
+                <FaHeadset className="text-xl" />
+                <span>Suporte</span>
               </Link>
             </li>
             <li>
