@@ -11,7 +11,6 @@ import path from "path";
 const app = express();
 
 connectDB();
-
 app.use(
   cors({
     origin: "https://rifa-online-frontend.onrender.com",
