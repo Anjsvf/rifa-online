@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCampaign = exports.getCampaignById = exports.getCampaigns = exports.createCampaign = exports.getCampaignCards = void 0;
+exports.saveCards = exports.deleteCampaign = exports.getCampaignById = exports.getCampaigns = exports.createCampaign = exports.getCampaignCards = void 0;
 const Campaign_1 = __importDefault(require("../model/Campaign"));
 const Card_1 = __importDefault(require("../model/Card"));
 const generateCampaignCards_1 = require("../utils/generateCampaignCards");
@@ -107,3 +107,16 @@ const deleteCampaign = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.deleteCampaign = deleteCampaign;
+const saveCards = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { cards } = req.body;
+        // Lógica para salvar as cartelas
+        yield Card_1.default.insertMany(cards);
+        res.status(201).json({ message: 'Cartelas salvas com sucesso' });
+    }
+    catch (error) {
+        console.error('Erro ao salvar as cartelas:', error);
+        res.status(500).json({ message: 'Erro ao salvar as cartelas' });
+    }
+});
+exports.saveCards = saveCards;

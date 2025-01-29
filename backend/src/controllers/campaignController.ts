@@ -124,3 +124,19 @@ export const deleteCampaign = async (
     res.status(500).json({ error: 'Erro ao excluir campanha.' });
   }
 };
+
+
+export const saveCards = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const { cards } = req.body;
+    // Lógica para salvar as cartelas
+    await Card.insertMany(cards);
+    res.status(201).json({ message: 'Cartelas salvas com sucesso' });
+  } catch (error) {
+    console.error('Erro ao salvar as cartelas:', error);
+    res.status(500).json({ message: 'Erro ao salvar as cartelas' });
+  }
+};

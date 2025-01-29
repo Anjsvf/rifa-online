@@ -19,17 +19,12 @@ const campaignController_1 = require("../controllers/campaignController");
 const model_1 = require("../model");
 const generateCampaignCards_1 = require("../utils/generateCampaignCards");
 const router = express_1.default.Router();
-// Rota para criar uma nova campanha
 router.post('/', auth_1.auth, multer_1.upload.single('image'), campaignController_1.createCampaign);
-// Rota para listar todas as campanhas do usuário autenticado
 router.get('/', auth_1.auth, campaignController_1.getCampaigns);
-// Rota para buscar os detalhes de uma campanha específica
 router.get('/:id', auth_1.auth, campaignController_1.getCampaignById);
-// Rota para gerar cartelas para uma campanha
 router.post('/:campaignId/generate-cards', auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        // Verifica se a campanha existe e pertence ao usuário autenticado
         const campaign = yield model_1.Campaign.findOne({
             _id: req.params.campaignId,
             userId: (_a = req.user) === null || _a === void 0 ? void 0 : _a.id
@@ -55,17 +50,6 @@ router.post('/:campaignId/generate-cards', auth_1.auth, (req, res) => __awaiter(
     }
 }));
 // Adicione esta rota para salvar as cartelas
-router.post('/cards', auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { cards } = req.body;
-        // Lógica para salvar as cartelas
-        yield model_1.Card.insertMany(cards);
-        res.status(201).json({ message: 'Cartelas salvas com sucesso' });
-    }
-    catch (error) {
-        console.error('Erro ao salvar as cartelas:', error);
-        res.status(500).json({ message: 'Erro ao salvar as cartelas' });
-    }
-}));
+router.post('/:campaignId/cards', auth_1.auth, campaignController_1.saveCards);
 router.delete('/:id', auth_1.auth, campaignController_1.deleteCampaign);
 exports.default = router;
