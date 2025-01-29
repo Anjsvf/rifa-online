@@ -4,7 +4,7 @@ import { upload } from '../config/multer';
 import { createCampaign, getCampaigns, getCampaignById, deleteCampaign } from '../controllers/campaignController';
 import { Campaign, Card } from '../model';
 import { generateCampaignCards } from '../utils/generateCampaignCards';
-import { getCampaignCards } from '../controllers/campaignController'
+import { getCampaignCards } from '../controllers/campaignController';
 
 interface AuthRequest extends Request {
   user?: {
@@ -16,8 +16,6 @@ const router = express.Router();
 
 // Rota para criar uma nova campanha
 router.post('/', auth, upload.single('image'), createCampaign);
-
-router.get('/:campaignId/cards', auth, getCampaignCards);
 
 // Rota para listar todas as campanhas do usuário autenticado
 router.get('/', auth, getCampaigns);
@@ -54,6 +52,19 @@ router.post('/:campaignId/generate-cards', auth, async (req: AuthRequest, res: R
   } catch (error) {
     console.error('Error generating cards:', error);
     res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Adicione esta rota para salvar as cartelas
+router.post('/cards', auth, async (req: AuthRequest, res: Response) => {
+  try {
+    const { cards } = req.body;
+    // Lógica para salvar as cartelas
+    await Card.insertMany(cards);
+    res.status(201).json({ message: 'Cartelas salvas com sucesso' });
+  } catch (error) {
+    console.error('Erro ao salvar as cartelas:', error);
+    res.status(500).json({ message: 'Erro ao salvar as cartelas' });
   }
 });
 

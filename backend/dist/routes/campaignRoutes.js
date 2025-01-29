@@ -18,11 +18,9 @@ const multer_1 = require("../config/multer");
 const campaignController_1 = require("../controllers/campaignController");
 const model_1 = require("../model");
 const generateCampaignCards_1 = require("../utils/generateCampaignCards");
-const campaignController_2 = require("../controllers/campaignController");
 const router = express_1.default.Router();
 // Rota para criar uma nova campanha
 router.post('/', auth_1.auth, multer_1.upload.single('image'), campaignController_1.createCampaign);
-router.get('/:campaignId/cards', auth_1.auth, campaignController_2.getCampaignCards);
 // Rota para listar todas as campanhas do usuário autenticado
 router.get('/', auth_1.auth, campaignController_1.getCampaigns);
 // Rota para buscar os detalhes de uma campanha específica
@@ -54,6 +52,19 @@ router.post('/:campaignId/generate-cards', auth_1.auth, (req, res) => __awaiter(
     catch (error) {
         console.error('Error generating cards:', error);
         res.status(500).json({ error: 'Server error' });
+    }
+}));
+// Adicione esta rota para salvar as cartelas
+router.post('/cards', auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { cards } = req.body;
+        // Lógica para salvar as cartelas
+        yield model_1.Card.insertMany(cards);
+        res.status(201).json({ message: 'Cartelas salvas com sucesso' });
+    }
+    catch (error) {
+        console.error('Erro ao salvar as cartelas:', error);
+        res.status(500).json({ message: 'Erro ao salvar as cartelas' });
     }
 }));
 router.delete('/:id', auth_1.auth, campaignController_1.deleteCampaign);
