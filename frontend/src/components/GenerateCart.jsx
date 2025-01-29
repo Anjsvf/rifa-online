@@ -137,6 +137,7 @@ const GenerateCard = ({ campaignId, onGenerate }) => {
         </button>
       )}
     </div>
+    //aqui
   );
 };
 
