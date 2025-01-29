@@ -126,17 +126,26 @@ export const deleteCampaign = async (
 };
 
 
-export const saveCards = async (
-  req: AuthRequest,
-  res: Response
-): Promise<void> => {
+export const saveCards = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
+    const { campaignId } = req.params;
     const { cards } = req.body;
-    // Lógica para salvar as cartelas
-    await Card.insertMany(cards);
-    res.status(201).json({ message: 'Cartelas salvas com sucesso' });
+
+    if (!cards || !Array.isArray(cards)) {
+      res.status(400).json({ error: "Dados de cartelas inválidos." });
+      return;
+    }
+
+    const newCards = cards.map((numbers) => ({
+      campaignId,
+      numbers,
+      status: "available",
+    }));
+
+    await Card.insertMany(newCards);
+    res.status(201).json({ message: "Cartelas salvas com sucesso!" });
   } catch (error) {
-    console.error('Erro ao salvar as cartelas:', error);
-    res.status(500).json({ message: 'Erro ao salvar as cartelas' });
+    console.error("Erro ao salvar as cartelas:", error);
+    res.status(500).json({ error: "Erro interno do servidor." });
   }
 };

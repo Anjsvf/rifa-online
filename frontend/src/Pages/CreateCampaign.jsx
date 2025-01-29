@@ -48,43 +48,58 @@ const CreateCampaign = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setIsLoading(true);
+  // No handleSubmit do CreateCampaign:
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError(null);
+  setIsLoading(true);
 
-    const authToken = localStorage.getItem("authToken");
-    if (!authToken) {
-      navigate("/login");
-      return;
-    }
+  const authToken = localStorage.getItem("authToken");
+  if (!authToken) {
+    navigate("/login");
+    return;
+  }
 
-    const data = new FormData();
-    data.append("name", formData.name);
-    data.append("quota", formData.quota);
-    data.append("price", formData.price);
-    data.append("phone", formData.phone);
-    data.append("prizeType", formData.prizeType);
-    if (formData.image) data.append("image", formData.image);
-    data.append("cards", JSON.stringify(generatedCards));
+  const data = new FormData();
+  data.append("name", formData.name);
+  data.append("quota", formData.quota);
+  data.append("price", formData.price);
+  data.append("phone", formData.phone);
+  data.append("prizeType", formData.prizeType);
+  if (formData.image) data.append("image", formData.image);
+  data.append("cards", JSON.stringify(generatedCards));
 
-    try {
-      const response = await axios.post(`${API_URL}/api/campaigns`, data, {
+  try {
+    const response = await axios.post(`${API_URL}/api/campaigns`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+
+    const campaignId = response.data.id; // Captura o ID da campanha criada
+
+    // Agora, salva as cartelas usando o campaignId
+    await axios.post(
+      `${API_URL}/api/campaigns/${campaignId}/cards`,
+      { cards: generatedCards },
+      {
         headers: {
-          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
         },
-      });
+      }
+    );
 
-      toast.success("Campanha criada com sucesso!");
-      navigate("/dashboard");
-    } catch (error) {
-      console.error("Erro ao criar a campanha:", error);
-      setError(error.response?.data?.error || "Erro interno. Tente novamente.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    toast.success("Campanha e cartelas salvas com sucesso!");
+    navigate("/dashboard");
+  } catch (error) {
+    console.error("Erro ao criar a campanha:", error);
+    setError(error.response?.data?.error || "Erro interno. Tente novamente.");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="container mx-auto p-8 bg-white shadow-md rounded-lg">
