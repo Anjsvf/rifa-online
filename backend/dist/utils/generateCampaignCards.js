@@ -8,21 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateCampaignCards = void 0;
-const Card_1 = __importDefault(require("../model/Card"));
 const generateCampaignCards = (campaignId, quota) => __awaiter(void 0, void 0, void 0, function* () {
-    const cards = [];
-    for (let i = 0; i < quota; i++) {
-        const card = new Card_1.default({
-            campaignId,
-            number: i + 1,
-        });
-        cards.push(card);
-    }
-    return cards;
+    return [];
 });
 exports.generateCampaignCards = generateCampaignCards;

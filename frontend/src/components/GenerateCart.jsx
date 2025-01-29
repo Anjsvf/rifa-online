@@ -43,30 +43,23 @@ const GenerateCard = ({ campaignId, onGenerate }) => {
     const authToken = localStorage.getItem("authToken");
     const API_URL = import.meta.env.VITE_API_URL;
 
-    if (!API_URL) {
-      setError("A URL da API não está definida.");
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      const response = await axios.post(
+      await axios.post(
         `${API_URL}/api/campaigns/${campaignId}/cards`,
         { cards },
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
-      
       toast.success("Cartelas salvas com sucesso!");
-      setCards([]); 
-      setNumCards(1); 
+      setCards([]);
+      setNumCards(1);
     } catch (error) {
       console.error("Erro ao salvar as cartelas:", error);
-      toast.error(error.response?.data?.message || "Erro ao salvar as cartelas. Tente novamente.");
+      toast.error("Erro ao salvar. Verifique o console.");
     } finally {
       setIsLoading(false);
     }
@@ -137,7 +130,6 @@ const GenerateCard = ({ campaignId, onGenerate }) => {
         </button>
       )}
     </div>
-    //aqui
   );
 };
 

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaUpload } from "react-icons/fa";
-import GenerateCard from "../components/GenerateCart"; 
+import GenerateCard from "../components/GenerateCart";
+import { toast } from "react-toastify";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 const CreateCampaign = () => {
@@ -18,10 +20,9 @@ const CreateCampaign = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [generatedCards, setGeneratedCards] = useState([]); 
+  const [generatedCards, setGeneratedCards] = useState([]);
   const navigate = useNavigate();
 
- 
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
     if (!authToken) {
@@ -29,90 +30,45 @@ const CreateCampaign = () => {
     }
   }, [navigate]);
 
-
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(value);
-  };
-
- 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
     if (name === "image") {
       const file = files[0];
-      setFormData({
-        ...formData,
-        image: file,
-      });
-      if (file) {
-        setImagePreview(URL.createObjectURL(file));
-      }
+      setFormData({ ...formData, image: file });
+      if (file) setImagePreview(URL.createObjectURL(file));
     } else if (name === "price") {
-      const numericValue = value.replace(/\D/g, ""); 
-      const formattedValue = formatCurrency(numericValue / 100); 
-      setFormData({
-        ...formData,
-        [name]: formattedValue,
-      });
+      const numericValue = value.replace(/\D/g, ""); // Remove não dígitos
+      setFormData({ ...formData, [name]: numericValue });
     } else if (name === "phone") {
-      
-      let phoneNumber = value.replace(/\D/g, "");
-      if (phoneNumber.length <= 11) {
-        phoneNumber = phoneNumber.replace(/^(\d{2})(\d)/g, "($1) $2");
-        phoneNumber = phoneNumber.replace(/(\d)(\d{4})$/, "$1-$2");
-        setFormData({
-          ...formData,
-          [name]: phoneNumber,
-        });
-      }
+      const numericPhone = value.replace(/\D/g, ""); // Remove formatação
+      setFormData({ ...formData, [name]: numericPhone });
     } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
+      setFormData({ ...formData, [name]: value });
     }
   };
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
 
-    
-    if (
-      !formData.name ||
-      !formData.quota ||
-      !formData.price ||
-      !formData.phone ||
-      !formData.prizeType
-    ) {
-      setError("Por favor, preencha todos os campos obrigatórios.");
-      setIsLoading(false);
-      return;
-    }
-
     const authToken = localStorage.getItem("authToken");
     if (!authToken) {
-      setError("Sessão expirada. Por favor, faça login novamente.");
       navigate("/login");
       return;
     }
 
-  
     const data = new FormData();
-    for (const key in formData) {
-      data.append(key, formData[key]);
-    }
-
-    
+    data.append("name", formData.name);
+    data.append("quota", formData.quota);
+    data.append("price", formData.price);
+    data.append("phone", formData.phone);
+    data.append("prizeType", formData.prizeType);
+    if (formData.image) data.append("image", formData.image);
     data.append("cards", JSON.stringify(generatedCards));
 
     try {
-   
       const response = await axios.post(`${API_URL}/api/campaigns`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -120,26 +76,11 @@ const CreateCampaign = () => {
         },
       });
 
-      const campaignId = response.data.id;
-
-    
-      navigate("/dashboard", {
-        state: {
-          message: "Campanha criada com sucesso!",
-        },
-      });
+      toast.success("Campanha criada com sucesso!");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Erro ao criar a campanha:", error);
-      if (error.response?.status === 401) {
-        localStorage.removeItem("authToken");
-        setError("Sessão expirada. Por favor, faça login novamente.");
-        navigate("/login");
-      } else {
-        setError(
-          error.response?.data?.message ||
-            "Erro ao criar a campanha. Por favor, tente novamente."
-        );
-      }
+      setError(error.response?.data?.error || "Erro interno. Tente novamente.");
     } finally {
       setIsLoading(false);
     }
@@ -154,7 +95,6 @@ const CreateCampaign = () => {
         </div>
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
-        
         <div>
           <label className="block text-gray-700">Nome da Campanha</label>
           <input
@@ -169,7 +109,6 @@ const CreateCampaign = () => {
           />
         </div>
 
-     
         <div>
           <label className="block text-gray-700">Quantidade de Cotas</label>
           <input
@@ -184,7 +123,6 @@ const CreateCampaign = () => {
           />
         </div>
 
-        
         <div>
           <label className="block text-gray-700">Valor da Cota (R$)</label>
           <input
@@ -199,7 +137,6 @@ const CreateCampaign = () => {
           />
         </div>
 
-       
         <div>
           <label className="block text-gray-700">Número de Celular</label>
           <input
@@ -214,7 +151,6 @@ const CreateCampaign = () => {
           />
         </div>
 
-        
         <div>
           <label className="block text-gray-700">Tipo de Prêmio</label>
           <select
@@ -230,14 +166,10 @@ const CreateCampaign = () => {
             <option value="Moto">Moto</option>
             <option value="Bicicleta">Bicicleta</option>
             <option value="Celular">Celular</option>
-            <option value="Fogão">Fogão</option>
-            <option value="Geladeira">Geladeira</option>
-            <option value="Microondas">Microondas</option>
             <option value="Outro">Outro (especifique abaixo)</option>
           </select>
         </div>
 
-   
         {formData.prizeType === "Outro" && (
           <div>
             <label className="block text-gray-700">Especifique o Prêmio</label>
@@ -254,7 +186,6 @@ const CreateCampaign = () => {
           </div>
         )}
 
-     
         <div>
           <label className="block text-gray-700 mb-2">Imagem do Prêmio</label>
           <div className="flex items-center justify-center w-full">
@@ -289,10 +220,8 @@ const CreateCampaign = () => {
           </div>
         </div>
 
-       
         <GenerateCard onGenerate={(cards) => setGeneratedCards(cards)} />
 
- 
         <button
           type="submit"
           className={`w-full px-4 py-2 rounded text-white font-semibold ${
