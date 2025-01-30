@@ -149,3 +149,4 @@ export const saveCards = async (req: AuthRequest, res: Response): Promise<void> 
     res.status(500).json({ error: "Erro interno do servidor." });
   }
 };
+

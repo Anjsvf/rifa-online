@@ -1,16 +1,16 @@
 import mongoose from 'mongoose';
 
-// Defina a interface para o documento Card
+
 interface ICard {
-  numbers: number[]; // Array de números da cartela
-  campaignId: string; // ID da campanha
-  status: 'available' | 'reserved' | 'sold'; // Status da cartela
+  numbers: number[]; 
+  campaignId: string; 
+  status: 'available' | 'reserved' | 'sold'; 
 }
 
-// Defina o esquema do Mongoose
+
 const cardSchema = new mongoose.Schema<ICard>({
-  numbers: { type: [Number], required: true }, // Campo obrigatório (array de números)
-  campaignId: { type: String, required: true }, // Campo obrigatório
+  numbers: { type: [Number], required: true }, 
+  campaignId: { type: String, required: true }, 
   status: {
     type: String,
     enum: ['available', 'reserved', 'sold'],
@@ -18,5 +18,5 @@ const cardSchema = new mongoose.Schema<ICard>({
   },
 });
 
-// Exporte o modelo
+
 export default mongoose.model<ICard>('Card', cardSchema);
