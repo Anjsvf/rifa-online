@@ -15,7 +15,7 @@ const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
 (0, database_1.connectDB)();
 app.use((0, cors_1.default)({
-    origin: ["https://rifa-online-frontend.onrender.com", "http://localhost:5000"],
+    origin: ["https://rifa-online-frontend.onrender.com", "https://rifa-online-frontend.onrender.com"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
