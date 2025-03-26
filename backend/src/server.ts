@@ -13,9 +13,10 @@ const app = express();
 connectDB();
 app.use(
   cors({
-    origin: "https://rifa-online-frontend.onrender.com",
+    origin: ["https://rifa-online-frontend.onrender.com", "http://localhost:5000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
   })
 );
 
