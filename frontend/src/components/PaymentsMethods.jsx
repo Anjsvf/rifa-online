@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { FaBarcode } from 'react-icons/fa';
+// import StripePayment from './StripePayment';
+import { FaBarcode, FaCreditCard } from 'react-icons/fa';
+
 import { SiPix } from 'react-icons/si';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -17,13 +19,19 @@ const PaymentsMethods = ({ reservationData, onPaymentComplete }) => {
       const authToken = localStorage.getItem('authToken');
       const headers = { Authorization: `Bearer ${authToken}` };
 
+      // Check if reservationData exists before accessing its properties
+      if (!reservationData) {
+        throw new Error('Dados da reserva não encontrados. Por favor, selecione uma reserva primeiro.');
+      }
+
       const paymentData = {
         method,
-        reservationId: reservationData?._id,
-        amount: reservationData?.amount,
+        reservationId: reservationData._id,
+        amount: reservationData.amount
        
       };
 
+      console.log('Dados enviados:', { paymentData, headers });
       const response = await axios.post(
         `${API_URL}/api/payments/process`,
         paymentData,
@@ -70,27 +78,41 @@ const PaymentsMethods = ({ reservationData, onPaymentComplete }) => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <button
-          className={`border rounded p-6 flex flex-col items-center cursor-pointer hover:bg-gray-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
-          onClick={() => processPayment('PIX')}
-          disabled={loading}
-        >
-          <SiPix className="text-6xl text-green-500 mb-4" />
-          <span className="text-lg font-semibold text-center">Pagar com PIX</span>
-          <span className="text-sm text-gray-500 mt-2">Aprovação instantânea</span>
-        </button>
+      {!reservationData ? (
+        <div className="p-4 bg-yellow-50 text-yellow-700 rounded-lg mb-4">
+          <p className="font-medium">Nenhuma reserva selecionada</p>
+          <p className="text-sm mt-1">Este componente está sendo usado na área de configurações sem dados de reserva. Para fazer um pagamento, você precisa selecionar uma reserva primeiro.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+          <button
+            className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg transition-colors"
+            onClick={() => processPayment('PIX')}
+            disabled={loading}
+          >
+            <SiPix className="text-xl" />
+            Pagar com PIX
+          </button>
 
-        <button
-          className={`border rounded p-6 flex flex-col items-center cursor-pointer hover:bg-gray-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
-          onClick={() => processPayment('Boleto')}
-          disabled={loading}
-        >
-          <FaBarcode className="text-6xl text-gray-700 mb-4" />
-          <span className="text-lg font-semibold text-center">Pagar com Boleto</span>
-          <span className="text-sm text-gray-500 mt-2">Prazo de 1-3 dias úteis</span>
-        </button>
-      </div>
+          <button
+            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg transition-colors"
+            onClick={() => processPayment('Boleto')}
+            disabled={loading}
+          >
+            <FaBarcode className="text-xl" />
+            Pagar com Boleto
+          </button>
+          
+          <button
+            className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white py-3 px-4 rounded-lg transition-colors"
+            onClick={() => processPayment('Stripe')}
+            disabled={loading}
+          >
+            <FaCreditCard className="text-xl" />
+            Pagar com Cartão
+          </button>
+        </div>
+      )}
 
       {loading && (
         <div className="flex justify-center mt-4">

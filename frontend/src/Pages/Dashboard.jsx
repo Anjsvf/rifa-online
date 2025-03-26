@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import { FaPlus, FaTrash, FaEye, FaList } from "react-icons/fa";
+import { FaPlus, FaTrash, FaEye, FaList, FaCreditCard } from "react-icons/fa";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -163,6 +163,14 @@ const Dashboard = () => {
                   >
                     <FaList /> Ver Cartelas
                   </Link>
+                  {campaign.paymentStatus === 'pending' && (
+                    <Link
+                      to={`/campaign-payment/${campaign._id}`}
+                      className="block w-full text-center bg-[#60d77c5e] text-black py-2 px-4 rounded hover:bg-green-500 hover:text-white transition-colors flex items-center gap-2 justify-center"
+                    >
+                      <FaCreditCard /> Pagar Publicação
+                    </Link>
+                  )}
                   <button
                     onClick={() => openModal(campaign._id)}
                     className="block w-full text-center bg-[#80808011] text-black py-2 px-4 rounded hover:bg-[#60d77c5e] transition-colors flex items-center gap-2 justify-center"

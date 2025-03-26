@@ -18,6 +18,11 @@ const campaignSchema = new mongoose_1.default.Schema({
         enum: ['active', 'completed', 'cancelled'],
         default: 'active'
     },
+    paymentStatus: {
+        type: String,
+        enum: ['pending', 'completed', 'failed'],
+        default: 'pending'
+    },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });

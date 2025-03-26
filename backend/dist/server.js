@@ -15,11 +15,19 @@ const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
 (0, database_1.connectDB)();
 app.use((0, cors_1.default)({
-    origin: "https://rifa-online-frontend.onrender.com",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
-app.use(express_1.default.json());
+// Parse JSON for all routes except Stripe webhooks
+app.use((req, res, next) => {
+    if (req.originalUrl === '/api/payments/webhook/stripe') {
+        next();
+    }
+    else {
+        express_1.default.json()(req, res, next);
+    }
+});
 app.use("/uploads", express_1.default.static(path_1.default.resolve(__dirname, "..", "uploads")));
 app.use("/api/users", userRoutes_1.default);
 app.use('/api', rankingRoutes_1.default);

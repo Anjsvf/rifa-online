@@ -8,7 +8,9 @@ import Dashboard from "./Pages/Dashboard";
 import Ranking from "./Pages/Ranking";
 import Configurations from "./Pages/Configurations";
 import CreateCampaign from "./Pages/CreateCampaign";
+import CampaignSuccess from "./Pages/CampaignSuccess";
 import CampaignDetails from "./Pages/CampaignDetails";
+import CampaignPayment from "./Pages/CampaignPayment";
 import SidebarMobile from "./components/SiderbarMobile";
 import Home from "./Pages/Home";
 
@@ -17,6 +19,8 @@ import Support from "./Pages/Support";
 import Suggestions from "./Pages/Suggestions";
 import LogOut from "./Pages/LogOut";
 import Reservations from "./Pages/Reservations";
+import PaymentSuccess from "./Pages/PaymentSuccess";
+import PaymentCancel from "./Pages/PaymentCancel";
 import GenerateCard from "./components/GenerateCart";
 import ViewCards from "./Pages/ViewCards";
 
@@ -45,10 +49,14 @@ function App() {
               <Route path="/ranking" element={<Ranking />} />
               <Route path="/settings" element={<Configurations />} />
               <Route path="/create-campaign" element={<CreateCampaign />} />
+          <Route path="/campaign-success" element={<CampaignSuccess />} />
+              <Route path="/campaign-payment/:campaignId" element={<CampaignPayment />} />
               <Route path="/aboutus" element={<AboutUs />} />
               <Route path="/support" element={<Support />} />
               <Route path="/suggestions" element={<Suggestions />} />
               <Route path="/reservations" element={<Reservations />} />
+          <Route path="/payment/success" element={<PaymentSuccess />} />
+          <Route path="/payment/cancel" element={<PaymentCancel />} />
               <Route path="/logout" element={<LogOut />} />
               <Route path="/generatecard" element={<GenerateCard />} />
               <Route path="/campaign/:id" element={<CampaignDetails />} />

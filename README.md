@@ -12,6 +12,7 @@
 - **CORS** for cross-origin resource sharing
 - **Mongoose** for data modeling
 - **dotenv** for environment variables management
+- **Stripe** for payment processing
 
 ### Frontend:
 - **React** with **Vite**
@@ -22,26 +23,6 @@
 - **React Icons** for visual icons
 
 ## Project Structure
-
-### Backend:
-```plaintext
-src/
-├── config/
-│   └── db.ts              # MongoDB database configuration
-├── controllers/
-│ 
-│   └── userController.ts       # Logic for managing users
-├── models/
-│  
-│   └── userModel.ts            # User data model
-├── routes/
-│  
-│   └── userRoutes.ts           # User routes
-├
-│   
-├── utils/
-│   ├── auth.ts                 # Authentication utility functions
-│   └── middleware.ts           # Middleware for request handling
 
 
 Features
@@ -86,7 +67,7 @@ Clone the repository:
 
 bash
 Copiar código
-git clone https://github.com/your-username/rifa-digital-frontend.git
+git clone https://github.com/Anjsvf/rifa-online
 cd rifa-digital-frontend
 Install dependencies:
 
@@ -112,18 +93,16 @@ POST /campaigns/:id/cards: Generate raffle cards for a campaign.
 Users:
 POST /auth/login: User login.
 POST /auth/register: User registration.
+Payments:
+POST /payments/stripe: Create a Stripe payment intent.
+POST /payments/pix: Generate a PIX payment QR code.
+POST /payments/boleto: Generate a Boleto payment slip.
 Contributing
 If you would like to contribute to this project, please feel free to submit a pull request or open an issue.
 
-License
-This project is licensed under the MIT License.
 
-yaml
-Copiar código
 
----
 
-This README is now formatted in Markdown and can be used directly in your GitHub repositories for both the frontend and backend of **Rifa Digital**!
 
 
 

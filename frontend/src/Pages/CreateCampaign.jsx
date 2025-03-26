@@ -94,7 +94,8 @@ const CreateCampaign = () => {
       );
   
       toast.success("Campanha e cartelas salvas com sucesso!");
-      navigate("/dashboard");
+      // Redireciona para a página de pagamento da campanha
+      navigate("/campaign-success", { state: { campaign: response.data } });
     } catch (error) {
       console.error("Erro ao criar a campanha:", error);
       setError(error.response?.data?.error || "Erro interno. Tente novamente.");

@@ -19,6 +19,7 @@ export interface User {
     customPrize?: string;
     image: string;
     status: 'active' | 'completed' | 'cancelled';
+    paymentStatus?: 'pending' | 'completed' | 'failed';
     createdAt: Date;
     updatedAt: Date;
   }

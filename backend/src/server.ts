@@ -13,13 +13,20 @@ const app = express();
 connectDB();
 app.use(
   cors({
-    origin: "https://rifa-online-frontend.onrender.com",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-app.use(express.json());
+// Parse JSON for all routes except Stripe webhooks
+app.use((req, res, next) => {
+  if (req.originalUrl === '/api/payments/webhook/stripe') {
+    next();
+  } else {
+    express.json()(req, res, next);
+  }
+});
 
 
 app.use("/uploads", express.static(path.resolve(__dirname, "..", "uploads")));
